@@ -4,16 +4,18 @@
 
 package com.azure.communication.callingserver.implementation.models;
 
-import com.azure.communication.callingserver.models.RecordingChannel;
-import com.azure.communication.callingserver.models.RecordingContent;
-import com.azure.communication.callingserver.models.RecordingFormat;
-
 import com.azure.core.annotation.Fluent;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The request payload start call recording operation. */
+/** The request payload start for call recording operation with call locator. */
 @Fluent
 public final class StartCallRecordingRequest {
+    /*
+     * The call locator.
+     */
+    @JsonProperty(value = "callLocator", required = true)
+    private CallLocatorInternal callLocator;
+
     /*
      * The uri to send notifications to.
      */
@@ -21,22 +23,42 @@ public final class StartCallRecordingRequest {
     private String recordingStateCallbackUri;
 
     /*
-     * Optional, audioVideo by default
+     * The content type of call recording.
      */
     @JsonProperty(value = "recordingContentType")
-    private RecordingContent recordingContentType;
+    private RecordingContentInternal recordingContentType;
 
     /*
-     * Optional, mixed by default
+     * The channel type of call recording.
      */
     @JsonProperty(value = "recordingChannelType")
-    private RecordingChannel recordingChannelType;
+    private RecordingChannelInternal recordingChannelType;
 
     /*
-     * Optional, mp4 by default
+     * The format type of call recording.
      */
     @JsonProperty(value = "recordingFormatType")
-    private RecordingFormat recordingFormatType;
+    private RecordingFormatInternal recordingFormatType;
+
+    /**
+     * Get the callLocator property: The call locator.
+     *
+     * @return the callLocator value.
+     */
+    public CallLocatorInternal getCallLocator() {
+        return this.callLocator;
+    }
+
+    /**
+     * Set the callLocator property: The call locator.
+     *
+     * @param callLocator the callLocator value to set.
+     * @return the StartCallRecordingRequest object itself.
+     */
+    public StartCallRecordingRequest setCallLocator(CallLocatorInternal callLocator) {
+        this.callLocator = callLocator;
+        return this;
+    }
 
     /**
      * Get the recordingStateCallbackUri property: The uri to send notifications to.
@@ -59,61 +81,61 @@ public final class StartCallRecordingRequest {
     }
 
     /**
-     * Get the recordingContentType property: Optional, audioVideo by default.
+     * Get the recordingContentType property: The content type of call recording.
      *
      * @return the recordingContentType value.
      */
-    public RecordingContent getRecordingContentType() {
+    public RecordingContentInternal getRecordingContentType() {
         return this.recordingContentType;
     }
 
     /**
-     * Set the recordingContentType property: Optional, audioVideo by default.
+     * Set the recordingContentType property: The content type of call recording.
      *
      * @param recordingContentType the recordingContentType value to set.
      * @return the StartCallRecordingRequest object itself.
      */
-    public StartCallRecordingRequest setRecordingContentType(RecordingContent recordingContentType) {
+    public StartCallRecordingRequest setRecordingContentType(RecordingContentInternal recordingContentType) {
         this.recordingContentType = recordingContentType;
         return this;
     }
 
     /**
-     * Get the recordingChannelType property: Optional, mixed by default.
+     * Get the recordingChannelType property: The channel type of call recording.
      *
      * @return the recordingChannelType value.
      */
-    public RecordingChannel getRecordingChannelType() {
+    public RecordingChannelInternal getRecordingChannelType() {
         return this.recordingChannelType;
     }
 
     /**
-     * Set the recordingChannelType property: Optional, mixed by default.
+     * Set the recordingChannelType property: The channel type of call recording.
      *
      * @param recordingChannelType the recordingChannelType value to set.
      * @return the StartCallRecordingRequest object itself.
      */
-    public StartCallRecordingRequest setRecordingChannelType(RecordingChannel recordingChannelType) {
+    public StartCallRecordingRequest setRecordingChannelType(RecordingChannelInternal recordingChannelType) {
         this.recordingChannelType = recordingChannelType;
         return this;
     }
 
     /**
-     * Get the recordingFormatType property: Optional, mp4 by default.
+     * Get the recordingFormatType property: The format type of call recording.
      *
      * @return the recordingFormatType value.
      */
-    public RecordingFormat getRecordingFormatType() {
+    public RecordingFormatInternal getRecordingFormatType() {
         return this.recordingFormatType;
     }
 
     /**
-     * Set the recordingFormatType property: Optional, mp4 by default.
+     * Set the recordingFormatType property: The format type of call recording.
      *
      * @param recordingFormatType the recordingFormatType value to set.
      * @return the StartCallRecordingRequest object itself.
      */
-    public StartCallRecordingRequest setRecordingFormatType(RecordingFormat recordingFormatType) {
+    public StartCallRecordingRequest setRecordingFormatType(RecordingFormatInternal recordingFormatType) {
         this.recordingFormatType = recordingFormatType;
         return this;
     }

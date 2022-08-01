@@ -33,7 +33,7 @@ To update generated files for calling service, run the following command
 ``` yaml
 tag: package-2022-04-07-preview
 require:
-    - https://raw.githubusercontent.com/atazimsft/azure-rest-api-specs/mediastream-recog/specification/communication/data-plane/CallingServer/preview/2022-04-07-preview/communicationservicescallingserver.json
+    - https://raw.githubusercontent.com/atazimsft/azure-rest-api-specs/mediastream-recog/specification/communication/data-plane/CallingServer/readme.md
 java: true
 output-folder: ..\
 license-header: MICROSOFT_MIT_SMALL
@@ -49,78 +49,158 @@ context-client-method-parameter: true
 title: Azure Communication CallingServer Service 
 directive:
 - rename-model:
-    from: CallRecordingStateChangeEvent
-    to: CallRecordingStateChangeEventInternal    
+    from: AcsCallParticipantDto
+    to: AcsCallParticipantInternal    
 - rename-model:
-    from: AddParticipantResultEvent
-    to: AddParticipantResultEventInternal    
+    from: AddParticipantsRequest
+    to: AddParticipantsRequestInternal    
 - rename-model:
-    from: PlayAudioResultEvent
-    to: PlayAudioResultEventInternal   
+    from: AddParticipantsResponse
+    to: AddParticipantsResponseInternal
 - rename-model:
-    from: ToneReceivedEvent
-    to: ToneReceivedEventInternal      
+    from: CallConnectionPropertiesDto
+    to: CallConnectionPropertiesInternal     
 - rename-model:
-    from: CallConnectionStateChangedEvent
-    to: CallConnectionStateChangedEventInternal
+    from: CallingOperationResultDetailsDto
+    to: CallingOperationResultDetailsInternal
 - rename-model:
-    from: ParticipantsUpdatedEvent
-    to: ParticipantsUpdatedEventInternal
+    from: CallingOperationStatusDto
+    to: CallingOperationStatusInternal
 - rename-model:
-    from: CallParticipant
-    to: CallParticipantInternal
+    from: CallSourceDto
+    to: CallSourceInternal
 - rename-model:
-    from: JoinCallResult
-    to: JoinCallResultInternal
+    from: CommunicationCloudEnvironmentModel
+    to: CommunicationCloudEnvironmentInternal
 - rename-model:
-    from: PlayAudioResult
-    to: PlayAudioResultInternal
+    from: GetParticipantsResponse
+    to: GetParticipantsResponseInternal
 - rename-model:
-    from: CallRecordingProperties
-    to: CallRecordingPropertiesInternal
+    from: RemoveParticipantsRequest
+    to: RemoveParticipantsRequestInternal
 - rename-model:
-    from: StartCallRecordingResult
-    to: StartCallRecordingResultInternal
+    from: RemoveParticipantsResponse
+    to: RemoveParticipantsResponseInternal
 - rename-model:
-    from: CreateCallResult
-    to: CreateCallResultInternal
+    from: TransferCallResponse
+    to: TransferCallResponseInternal
 - rename-model:
-    from: AddParticipantResult
-    to: AddParticipantResultInternal    
+    from: TransferToParticipantRequest
+    to: TransferToParticipantRequestInternal
 - rename-model:
-    from: CancelAllMediaOperationsResult
-    to: CancelAllMediaOperationsResultInternal
+    from: CreateCallRequest
+    to: CreateCallRequestInternal
 - rename-model:
-    from: ResultInfo
-    to: ResultInfoInternal
+    from: AnswerCallRequest
+    to: AnswerCallRequestInternal
 - rename-model:
-    from: ToneInfo
-    to: ToneInfoInternal                                            
+    from: RedirectCallRequest
+    to: RedirectCallRequestInternal
+- rename-model:
+    from: RejectCallRequest
+    to: RejectCallRequestInternal
+- rename-model:
+    from: CallLocator
+    to: CallLocatorInternal
+- rename-model:
+    from: RecordingIdResponse
+    to: RecordingIdResponseInternal
+- rename-model:
+    from: RecordingStatusResponse
+    to: RecordingStatusResponseInternal
+- rename-model:
+    from: PlayResponse
+    to: PlayResponseInternal
+- rename-model:
+    from: PlaySource
+    to: PlaySourceInternal
+- rename-model:
+    from: FileSource
+    to: FileSourceInternal
+- rename-model:
+    from: PlayOptions
+    to: PlayOptionsInternal
+    
+# Remove models
+- remove-model: AcsEventType
+- remove-model: AddParticipantsFailedEvent
+- remove-model: AddParticipantsSucceededEvent
+- remove-model: CallConnectedEvent
+- remove-model: CallDisconnectedEvent
+- remove-model: CallTransferAcceptedEvent
+- remove-model: CallTransferFailedEvent
+- remove-model: ParticipantsUpdatedEvent
+- remove-model: ResultInfo
 ```
 
-### Rename RecordingChannelType to RecordingChannel
+### Rename RecordingChannelType to RecordingChannelInternal
 ``` yaml
 directive:
   - from: swagger-document
     where: $.definitions.RecordingChannelType
     transform: >
-      $["x-ms-enum"].name = "RecordingChannel";
+      $["x-ms-enum"].name = "RecordingChannelInternal";
 ```
 
-### Rename RecordingContentType to RecordingContent
+### Rename RecordingContentType to RecordingContentInternal
 ``` yaml
 directive:
   - from: swagger-document
     where: $.definitions.RecordingContentType
     transform: >
-      $["x-ms-enum"].name = "RecordingContent";
+      $["x-ms-enum"].name = "RecordingContentInternal";
 ```
 
-### Rename RecordingFormatType to RecordingFormat
+### Rename RecordingFormatType to RecordingFormatInternal
 ``` yaml
 directive:
 - from: swagger-document
   where: $.definitions.RecordingFormatType["x-ms-enum"]
   transform: >
-    $.name = "RecordingFormat";
+    $.name = "RecordingFormatInternal";
+```
+
+### Rename RecordingState to RecordingStateInternal
+``` yaml
+directive:
+- from: swagger-document
+  where: $.definitions.RecordingState["x-ms-enum"]
+  transform: >
+    $.name = "RecordingStateInternal";
+```
+
+### Rename PlaySourceType to PlaySourceTypeInternal
+``` yaml
+directive:
+- from: swagger-document
+  where: $.definitions.PlaySourceType["x-ms-enum"]
+  transform: >
+    $.name = "PlaySourceTypeInternal";
+```
+
+### Rename CallLocatorKind to CallLocatorKindInternal
+``` yaml
+directive:
+- from: swagger-document
+  where: $.definitions.CallLocatorKind["x-ms-enum"]
+  transform: >
+    $.name = "CallLocatorKindInternal";
+```
+
+### Rename CallConnectionStateModel to CallConnectionStateModelInternal
+``` yaml
+directive:
+- from: swagger-document
+  where: $.definitions.CallConnectionStateModel["x-ms-enum"]
+  transform: >
+    $.name = "CallConnectionStateModelInternal";
+```
+
+### Rename RecordingStatus to RecordingStatusInternal
+``` yaml
+directive:
+- from: swagger-document
+  where: $.definitions.RecordingStatus["x-ms-enum"]
+  transform: >
+    $.name = "RecordingStatusInternal";
 ```
