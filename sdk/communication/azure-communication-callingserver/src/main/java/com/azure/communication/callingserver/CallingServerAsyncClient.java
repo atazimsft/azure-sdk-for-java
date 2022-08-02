@@ -11,17 +11,11 @@ import com.azure.communication.callingserver.implementation.ServerCallsImpl;
 import com.azure.communication.callingserver.implementation.accesshelpers.CallConnectionPropertiesConstructorProxy;
 import com.azure.communication.callingserver.implementation.accesshelpers.ErrorConstructorProxy;
 import com.azure.communication.callingserver.implementation.converters.CommunicationIdentifierConverter;
-import com.azure.communication.callingserver.implementation.models.CallSourceInternal;
+import com.azure.communication.callingserver.implementation.models.*;
 import com.azure.communication.callingserver.models.CallConnectionProperties;
 import com.azure.communication.callingserver.models.CallingServerErrorException;
-import com.azure.communication.callingserver.implementation.models.CommunicationIdentifierModel;
-import com.azure.communication.callingserver.implementation.models.CreateCallRequestInternal;
-import com.azure.communication.callingserver.implementation.models.AnswerCallRequestInternal;
-import com.azure.communication.callingserver.implementation.models.RedirectCallRequestInternal;
-import com.azure.communication.callingserver.implementation.models.RejectCallRequestInternal;
-import com.azure.communication.callingserver.implementation.models.CallRejectReason;
-import com.azure.communication.callingserver.implementation.models.PhoneNumberIdentifierModel;
 import com.azure.communication.callingserver.models.CreateCallOptions;
+import com.azure.communication.callingserver.models.MediaStreamingConfiguration;
 import com.azure.communication.common.CommunicationIdentifier;
 import com.azure.core.annotation.ReturnType;
 import com.azure.core.annotation.ServiceClient;
@@ -167,13 +161,21 @@ public final class CallingServerAsyncClient {
     }
 
     Mono<Response<CallConnectionProperties>> answerCallWithResponseInternal(String incomingCallContext, String callbackUri,
+                                                                            MediaStreamingConfiguration mediaStreamingConfig,
                                                                             Context context) {
         try {
             context = context == null ? Context.NONE : context;
 
+            MediaStreamingConfigurationDto mediaStreamingConfigDto = new MediaStreamingConfigurationDto()
+                .setAudioChannelType(MediaStreamingAudioChannelTypeDto.fromString(mediaStreamingConfig.getAudioChannelType().name()))
+                .setContentType(MediaStreamingContentTypeDto.fromString(mediaStreamingConfig.getContentType().name()))
+                .setTransportType(MediaStreamingTransportTypeDto.fromString(mediaStreamingConfig.getTransportType().name()))
+                .setTransportUrl(mediaStreamingConfig.getTransportUrl());
+
             AnswerCallRequestInternal request = new AnswerCallRequestInternal()
                 .setIncomingCallContext(incomingCallContext)
-                .setCallbackUri(callbackUri);
+                .setCallbackUri(callbackUri)
+                .setMediaStreamingConfiguration(mediaStreamingConfigDto);
 
             return serverCallingInternal.answerCallWithResponseAsync(request, context)
                 .onErrorMap(HttpResponseException.class, ErrorConstructorProxy::create)

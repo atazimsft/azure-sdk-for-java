@@ -33,7 +33,7 @@ To update generated files for calling service, run the following command
 ``` yaml
 tag: package-2022-04-07-preview
 require:
-    - https://github.com/richardcho-msft/azure-rest-api-specs/blob/dev-communication-CallingServer-2022-04-07-preview/specification/communication/data-plane/CallingServer/readme.md
+    - https://raw.githubusercontent.com/atazimsft/azure-rest-api-specs/mediastream-recog/specification/communication/data-plane/CallingServer/readme.md
 java: true
 output-folder: ..\
 license-header: MICROSOFT_MIT_SMALL

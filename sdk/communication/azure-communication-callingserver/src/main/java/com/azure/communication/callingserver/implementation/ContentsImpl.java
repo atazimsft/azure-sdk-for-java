@@ -5,6 +5,7 @@
 package com.azure.communication.callingserver.implementation;
 
 import com.azure.communication.callingserver.implementation.models.PlayRequest;
+import com.azure.communication.callingserver.implementation.models.RecognizeRequest;
 import com.azure.communication.callingserver.implementation.models.RecordingStatusResponseInternal;
 import com.azure.communication.callingserver.implementation.models.StartCallRecordingRequest;
 import com.azure.core.annotation.BodyParam;
@@ -68,6 +69,16 @@ public final class ContentsImpl {
                 @HostParam("endpoint") String endpoint,
                 @PathParam("callConnectionId") String callConnectionId,
                 @QueryParam("api-version") String apiVersion,
+                Context context);
+
+        @Post("/calling/callConnections/{callConnectionId}:recognize")
+        @ExpectedResponses({202})
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Mono<Response<Void>> recognize(
+                @HostParam("endpoint") String endpoint,
+                @PathParam("callConnectionId") String callConnectionId,
+                @QueryParam("api-version") String apiVersion,
+                @BodyParam("application/json") RecognizeRequest recognizeRequest,
                 Context context);
 
         @Post("/calling/recordings")
@@ -273,6 +284,110 @@ public final class ContentsImpl {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<Void> cancelAllMediaOperationsWithResponse(String callConnectionId, Context context) {
         return cancelAllMediaOperationsWithResponseAsync(callConnectionId, context).block();
+    }
+
+    /**
+     * Recognize media from call.
+     *
+     * @param callConnectionId The call connection id.
+     * @param recognizeRequest The media recognize request.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the completion.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<Response<Void>> recognizeWithResponseAsync(String callConnectionId, RecognizeRequest recognizeRequest) {
+        return FluxUtil.withContext(
+                context ->
+                        service.recognize(
+                                this.client.getEndpoint(),
+                                callConnectionId,
+                                this.client.getApiVersion(),
+                                recognizeRequest,
+                                context));
+    }
+
+    /**
+     * Recognize media from call.
+     *
+     * @param callConnectionId The call connection id.
+     * @param recognizeRequest The media recognize request.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the completion.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<Response<Void>> recognizeWithResponseAsync(
+            String callConnectionId, RecognizeRequest recognizeRequest, Context context) {
+        return service.recognize(
+                this.client.getEndpoint(), callConnectionId, this.client.getApiVersion(), recognizeRequest, context);
+    }
+
+    /**
+     * Recognize media from call.
+     *
+     * @param callConnectionId The call connection id.
+     * @param recognizeRequest The media recognize request.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the completion.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<Void> recognizeAsync(String callConnectionId, RecognizeRequest recognizeRequest) {
+        return recognizeWithResponseAsync(callConnectionId, recognizeRequest)
+                .flatMap((Response<Void> res) -> Mono.empty());
+    }
+
+    /**
+     * Recognize media from call.
+     *
+     * @param callConnectionId The call connection id.
+     * @param recognizeRequest The media recognize request.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the completion.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<Void> recognizeAsync(String callConnectionId, RecognizeRequest recognizeRequest, Context context) {
+        return recognizeWithResponseAsync(callConnectionId, recognizeRequest, context)
+                .flatMap((Response<Void> res) -> Mono.empty());
+    }
+
+    /**
+     * Recognize media from call.
+     *
+     * @param callConnectionId The call connection id.
+     * @param recognizeRequest The media recognize request.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void recognize(String callConnectionId, RecognizeRequest recognizeRequest) {
+        recognizeAsync(callConnectionId, recognizeRequest).block();
+    }
+
+    /**
+     * Recognize media from call.
+     *
+     * @param callConnectionId The call connection id.
+     * @param recognizeRequest The media recognize request.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the response.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> recognizeWithResponse(
+            String callConnectionId, RecognizeRequest recognizeRequest, Context context) {
+        return recognizeWithResponseAsync(callConnectionId, recognizeRequest, context).block();
     }
 
     /**
