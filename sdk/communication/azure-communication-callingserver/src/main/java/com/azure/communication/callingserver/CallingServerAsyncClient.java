@@ -142,7 +142,7 @@ public final class CallingServerAsyncClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<CallConnectionProperties> answerCall(String incomingCallContext, String callbackUri) {
-        return answerCallWithResponse(incomingCallContext, callbackUri).flatMap(FluxUtil::toMono);
+        return answerCallWithResponse(incomingCallContext, callbackUri, null).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -156,8 +156,8 @@ public final class CallingServerAsyncClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<CallConnectionProperties>> answerCallWithResponse(String incomingCallContext,
-                                                                           String callbackUri) {
-        return withContext(context -> answerCallWithResponseInternal(incomingCallContext, callbackUri, context));
+                                                                           String callbackUri, MediaStreamingConfiguration mediaStreamConfig) {
+        return withContext(context -> answerCallWithResponseInternal(incomingCallContext, callbackUri, mediaStreamConfig, context));
     }
 
     Mono<Response<CallConnectionProperties>> answerCallWithResponseInternal(String incomingCallContext, String callbackUri,
@@ -166,16 +166,19 @@ public final class CallingServerAsyncClient {
         try {
             context = context == null ? Context.NONE : context;
 
-            MediaStreamingConfigurationDto mediaStreamingConfigDto = new MediaStreamingConfigurationDto()
-                .setAudioChannelType(MediaStreamingAudioChannelTypeDto.fromString(mediaStreamingConfig.getAudioChannelType().name()))
-                .setContentType(MediaStreamingContentTypeDto.fromString(mediaStreamingConfig.getContentType().name()))
-                .setTransportType(MediaStreamingTransportTypeDto.fromString(mediaStreamingConfig.getTransportType().name()))
-                .setTransportUrl(mediaStreamingConfig.getTransportUrl());
+            AnswerCallRequestInternal request = new AnswerCallRequestInternal();
 
-            AnswerCallRequestInternal request = new AnswerCallRequestInternal()
-                .setIncomingCallContext(incomingCallContext)
-                .setCallbackUri(callbackUri)
-                .setMediaStreamingConfiguration(mediaStreamingConfigDto);
+            if (mediaStreamingConfig != null) {
+                MediaStreamingConfigurationDto mediaStreamingConfigDto = new MediaStreamingConfigurationDto()
+                    .setAudioChannelType(MediaStreamingAudioChannelTypeDto.fromString(mediaStreamingConfig.getAudioChannelType().name()))
+                    .setContentType(MediaStreamingContentTypeDto.fromString(mediaStreamingConfig.getContentType().name()))
+                    .setTransportType(MediaStreamingTransportTypeDto.fromString(mediaStreamingConfig.getTransportType().name()))
+                    .setTransportUrl(mediaStreamingConfig.getTransportUrl());
+
+                request.setIncomingCallContext(incomingCallContext).setCallbackUri(callbackUri).setMediaStreamingConfiguration(mediaStreamingConfigDto);
+            } else {
+                request.setIncomingCallContext(incomingCallContext).setCallbackUri(callbackUri);
+            }
 
             return serverCallingInternal.answerCallWithResponseAsync(request, context)
                 .onErrorMap(HttpResponseException.class, ErrorConstructorProxy::create)
