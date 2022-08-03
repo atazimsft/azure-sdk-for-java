@@ -122,7 +122,6 @@ directive:
     to: PlayOptionsInternal
     
 # Remove models
-- remove-model: AcsEventType
 - remove-model: AddParticipantsFailedEvent
 - remove-model: AddParticipantsSucceededEvent
 - remove-model: CallConnectedEvent
@@ -203,4 +202,13 @@ directive:
   where: $.definitions.RecordingStatus["x-ms-enum"]
   transform: >
     $.name = "RecordingStatusInternal";
+```
+
+### Rename AcsEventType to AcsEventTypeInternal
+``` yaml
+directive:
+- from: swagger-document
+  where: $.definitions.AcsEventType["x-ms-enum"]
+  transform: >
+    $.name = "AcsEventTypeInternal";
 ```
