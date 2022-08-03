@@ -7,6 +7,7 @@ package com.azure.communication.callingserver;
 import com.azure.communication.callingserver.models.CallConnectionProperties;
 import com.azure.communication.callingserver.models.CallingServerErrorException;
 import com.azure.communication.callingserver.models.CreateCallOptions;
+import com.azure.communication.callingserver.models.MediaStreamingConfiguration;
 import com.azure.communication.common.CommunicationIdentifier;
 import com.azure.core.annotation.ReturnType;
 import com.azure.core.annotation.ServiceClient;
@@ -85,8 +86,9 @@ public final class CallingServerClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<CallConnectionProperties> answerCallWithResponse(String incomingCallContext, String callbackUri,
+                                                                     MediaStreamingConfiguration mediaStreamingConfig,
                                                                      Context context) {
-        return callingServerAsyncClient.answerCallWithResponseInternal(incomingCallContext, callbackUri, context).block();
+        return callingServerAsyncClient.answerCallWithResponseInternal(incomingCallContext, callbackUri, mediaStreamingConfig, context).block();
     }
 
     /**
