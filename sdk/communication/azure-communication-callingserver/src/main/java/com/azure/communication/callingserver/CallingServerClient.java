@@ -79,6 +79,7 @@ public final class CallingServerClient {
      *
      * @param incomingCallContext The incoming call context.
      * @param callbackUri The call back uri. Optional
+     * @param mediaStreamingConfiguration The MediaStreamingConfiguration. Optional
      * @param context The context to associate with this operation.
      * @throws CallingServerErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
@@ -86,9 +87,9 @@ public final class CallingServerClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<CallConnectionProperties> answerCallWithResponse(String incomingCallContext, String callbackUri,
-                                                                     MediaStreamingConfiguration mediaStreamingConfig,
+                                                                     MediaStreamingConfiguration mediaStreamingConfiguration,
                                                                      Context context) {
-        return callingServerAsyncClient.answerCallWithResponseInternal(incomingCallContext, callbackUri, mediaStreamingConfig, context).block();
+        return callingServerAsyncClient.answerCallWithResponseInternal(incomingCallContext, callbackUri, mediaStreamingConfiguration, context).block();
     }
 
     /**

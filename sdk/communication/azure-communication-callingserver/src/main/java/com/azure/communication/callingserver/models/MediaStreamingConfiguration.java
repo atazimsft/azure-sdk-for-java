@@ -5,6 +5,7 @@ package com.azure.communication.callingserver.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/** The MediaStreamingConfiguration model. */
 public class MediaStreamingConfiguration {
     /*
      * Transport URL for media streaming

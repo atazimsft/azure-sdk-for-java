@@ -11,7 +11,18 @@ import com.azure.communication.callingserver.implementation.ServerCallsImpl;
 import com.azure.communication.callingserver.implementation.accesshelpers.CallConnectionPropertiesConstructorProxy;
 import com.azure.communication.callingserver.implementation.accesshelpers.ErrorConstructorProxy;
 import com.azure.communication.callingserver.implementation.converters.CommunicationIdentifierConverter;
-import com.azure.communication.callingserver.implementation.models.*;
+import com.azure.communication.callingserver.implementation.models.AnswerCallRequestInternal;
+import com.azure.communication.callingserver.implementation.models.CallRejectReason;
+import com.azure.communication.callingserver.implementation.models.CallSourceInternal;
+import com.azure.communication.callingserver.implementation.models.CommunicationIdentifierModel;
+import com.azure.communication.callingserver.implementation.models.CreateCallRequestInternal;
+import com.azure.communication.callingserver.implementation.models.MediaStreamingAudioChannelTypeDto;
+import com.azure.communication.callingserver.implementation.models.MediaStreamingConfigurationDto;
+import com.azure.communication.callingserver.implementation.models.MediaStreamingContentTypeDto;
+import com.azure.communication.callingserver.implementation.models.MediaStreamingTransportTypeDto;
+import com.azure.communication.callingserver.implementation.models.PhoneNumberIdentifierModel;
+import com.azure.communication.callingserver.implementation.models.RedirectCallRequestInternal;
+import com.azure.communication.callingserver.implementation.models.RejectCallRequestInternal;
 import com.azure.communication.callingserver.models.CallConnectionProperties;
 import com.azure.communication.callingserver.models.CallingServerErrorException;
 import com.azure.communication.callingserver.models.CreateCallOptions;
@@ -150,30 +161,31 @@ public final class CallingServerAsyncClient {
      *
      * @param incomingCallContext The incoming call context.
      * @param callbackUri The call back uri. Optional
+     * @param mediaStreamingConfiguration The MediaStreamingConfiguration. Optional
      * @throws CallingServerErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return Response for a successful CreateCallConnection request.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<CallConnectionProperties>> answerCallWithResponse(String incomingCallContext,
-                                                                           String callbackUri, MediaStreamingConfiguration mediaStreamConfig) {
-        return withContext(context -> answerCallWithResponseInternal(incomingCallContext, callbackUri, mediaStreamConfig, context));
+                                                                           String callbackUri, MediaStreamingConfiguration mediaStreamingConfiguration) {
+        return withContext(context -> answerCallWithResponseInternal(incomingCallContext, callbackUri, mediaStreamingConfiguration, context));
     }
 
     Mono<Response<CallConnectionProperties>> answerCallWithResponseInternal(String incomingCallContext, String callbackUri,
-                                                                            MediaStreamingConfiguration mediaStreamingConfig,
+                                                                            MediaStreamingConfiguration mediaStreamingConfiguration,
                                                                             Context context) {
         try {
             context = context == null ? Context.NONE : context;
 
             AnswerCallRequestInternal request = new AnswerCallRequestInternal();
 
-            if (mediaStreamingConfig != null) {
+            if (mediaStreamingConfiguration != null) {
                 MediaStreamingConfigurationDto mediaStreamingConfigDto = new MediaStreamingConfigurationDto()
-                    .setAudioChannelType(MediaStreamingAudioChannelTypeDto.fromString(mediaStreamingConfig.getAudioChannelType().name()))
-                    .setContentType(MediaStreamingContentTypeDto.fromString(mediaStreamingConfig.getContentType().name()))
-                    .setTransportType(MediaStreamingTransportTypeDto.fromString(mediaStreamingConfig.getTransportType().name()))
-                    .setTransportUrl(mediaStreamingConfig.getTransportUrl());
+                    .setAudioChannelType(MediaStreamingAudioChannelTypeDto.fromString(mediaStreamingConfiguration.getAudioChannelType().name()))
+                    .setContentType(MediaStreamingContentTypeDto.fromString(mediaStreamingConfiguration.getContentType().name()))
+                    .setTransportType(MediaStreamingTransportTypeDto.fromString(mediaStreamingConfiguration.getTransportType().name()))
+                    .setTransportUrl(mediaStreamingConfiguration.getTransportUrl());
 
                 request.setIncomingCallContext(incomingCallContext).setCallbackUri(callbackUri).setMediaStreamingConfiguration(mediaStreamingConfigDto);
             } else {
