@@ -11,10 +11,15 @@ import com.azure.communication.callingserver.implementation.models.PlayOptionsIn
 import com.azure.communication.callingserver.implementation.models.PlayRequest;
 import com.azure.communication.callingserver.implementation.models.PlaySourceInternal;
 import com.azure.communication.callingserver.implementation.models.PlaySourceTypeInternal;
+import com.azure.communication.callingserver.implementation.models.RecognizeOptionsInternal;
+import com.azure.communication.callingserver.implementation.models.RecognizeRequest;
 import com.azure.communication.callingserver.models.CallingServerErrorException;
 import com.azure.communication.callingserver.models.FileSource;
 import com.azure.communication.callingserver.models.PlayOptions;
 import com.azure.communication.callingserver.models.PlaySource;
+import com.azure.communication.callingserver.models.PlaySourceType;
+import com.azure.communication.callingserver.models.RecognizeAttributes;
+import com.azure.communication.callingserver.models.RecognizeOptions;
 import com.azure.communication.common.CommunicationIdentifier;
 import com.azure.core.annotation.ReturnType;
 import com.azure.core.annotation.ServiceMethod;
@@ -132,6 +137,52 @@ public class CallMediaAsync {
 
             return contentsInternal.cancelAllMediaOperationsWithResponseAsync(callConnectionId, context)
                 .onErrorMap(HttpResponseException.class, ErrorConstructorProxy::create);
+        } catch (RuntimeException ex) {
+            return monoError(logger, ex);
+        }
+    }
+
+    /**
+     * Recognize media from call.
+     * @param callConnectionId The call connection id.
+     * @param recognizeAttributes Different attributes for recognize.
+     * @return Void
+     */
+    public Mono<Void> recognize(String callConnectionId, RecognizeAttributes recognizeAttributes) {
+        return recognizeWithResponse(callConnectionId, recognizeAttributes, null, null).then();
+    }
+
+    /**
+     * Recognize media from a call.
+     * @param callConnectionId The call connection id.
+     * @param recognizeAttributes Different attributes for recognize.
+     * @param recognizeOptions Optional attributes for recognize.
+     * @param context A {@link Context} representing the request context.
+     * @return Response for successful recognize request.
+     */
+    public Mono<Response<Void>> recognizeWithResponse(String callConnectionId, RecognizeAttributes recognizeAttributes, RecognizeOptions recognizeOptions, Context context) {
+        try {
+            context = context == null ? Context.NONE : context;
+
+            PlaySourceInternal playSourceInternal = new PlaySourceInternal();
+            playSourceInternal.setPlaySourceId(recognizeOptions.getPlaySourceInfo().getPlaySourceId());
+
+            RecognizeRequest recognizeRequest = new RecognizeRequest()
+                .setRecognizeInputType(recognizeOptions.getRecognizeInputType())
+                .setPlaySourceInfo(playSourceInternal)
+                .setStopCurrentOperations(recognizeOptions.isStopCurrentOperations())
+                .setOperationContext(recognizeOptions.getOperationContext());
+
+            if (recognizeOptions != null) {
+                RecognizeOptionsInternal recognizeOptionsInternal = new RecognizeOptionsInternal();
+                recognizeOptionsInternal.setDtmfOptions(recognizeAttributes.getDtmfOptions())
+                    .setPausePlayOnResponse(recognizeAttributes.isPausePlayOnResponse())
+                    .setInitialSilenceTimeoutInSeconds(recognizeAttributes.getInitialSilenceTimeoutInSeconds());
+                recognizeRequest.setRecognizeOptions(recognizeOptionsInternal);
+            }
+
+            return contentsInternal.recognizeWithResponseAsync(callConnectionId, recognizeRequest, context);
+
         } catch (RuntimeException ex) {
             return monoError(logger, ex);
         }

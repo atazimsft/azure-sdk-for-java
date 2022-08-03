@@ -6,6 +6,8 @@ package com.azure.communication.callingserver;
 import com.azure.communication.callingserver.models.CallingServerErrorException;
 import com.azure.communication.callingserver.models.PlayOptions;
 import com.azure.communication.callingserver.models.PlaySource;
+import com.azure.communication.callingserver.models.RecognizeAttributes;
+import com.azure.communication.callingserver.models.RecognizeOptions;
 import com.azure.communication.common.CommunicationIdentifier;
 import com.azure.core.annotation.ReturnType;
 import com.azure.core.annotation.ServiceMethod;
@@ -102,4 +104,27 @@ public class CallMedia {
         return callMediaAsync.cancelAllMediaOperationsWithResponse(context).block();
     }
 
+    /**
+     * Recognize media from call.
+     * @param callConnectionId The call connection id.
+     * @param recognizeAttributes Different attributes for recognize.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void recognize(String callConnectionId, RecognizeAttributes recognizeAttributes) {
+        callMediaAsync.recognize(callConnectionId, recognizeAttributes).block();
+    }
+
+    /**
+     * Recognize media from call.
+     * @param callConnectionId The call connection id.
+     * @param recognizeAttributes Different attributes for recognize.
+     * @param recognizeOptions Optional attributes for recognize.
+     * @return Response for a successful recognize request.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> recognizeWithResponse(String callConnectionId, RecognizeAttributes recognizeAttributes, RecognizeOptions recognizeOptions, Context context) {
+        return callMediaAsync
+            .recognizeWithResponse(callConnectionId, recognizeAttributes, recognizeOptions, context)
+            .block();
+    }
 }
