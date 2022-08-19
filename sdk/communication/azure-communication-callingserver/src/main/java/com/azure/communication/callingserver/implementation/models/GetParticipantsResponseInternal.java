@@ -15,7 +15,7 @@ public final class GetParticipantsResponseInternal {
      * The values property.
      */
     @JsonProperty(value = "values")
-    private List<AcsCallParticipantInternal> values;
+    private List<AcsCallParticipant> values;
 
     /*
      * The nextLink property.
@@ -28,7 +28,7 @@ public final class GetParticipantsResponseInternal {
      *
      * @return the values value.
      */
-    public List<AcsCallParticipantInternal> getValues() {
+    public List<AcsCallParticipant> getValues() {
         return this.values;
     }
 
@@ -38,7 +38,7 @@ public final class GetParticipantsResponseInternal {
      * @param values the values value to set.
      * @return the GetParticipantsResponseInternal object itself.
      */
-    public GetParticipantsResponseInternal setValues(List<AcsCallParticipantInternal> values) {
+    public GetParticipantsResponseInternal setValues(List<AcsCallParticipant> values) {
         this.values = values;
         return this;
     }

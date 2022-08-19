@@ -15,7 +15,7 @@ public final class AddParticipantsResponseInternal {
      * The participants property.
      */
     @JsonProperty(value = "participants")
-    private List<AcsCallParticipantInternal> participants;
+    private List<AcsCallParticipant> participants;
 
     /*
      * The operation context provided by client.
@@ -28,7 +28,7 @@ public final class AddParticipantsResponseInternal {
      *
      * @return the participants value.
      */
-    public List<AcsCallParticipantInternal> getParticipants() {
+    public List<AcsCallParticipant> getParticipants() {
         return this.participants;
     }
 
@@ -38,7 +38,7 @@ public final class AddParticipantsResponseInternal {
      * @param participants the participants value to set.
      * @return the AddParticipantsResponseInternal object itself.
      */
-    public AddParticipantsResponseInternal setParticipants(List<AcsCallParticipantInternal> participants) {
+    public AddParticipantsResponseInternal setParticipants(List<AcsCallParticipant> participants) {
         this.participants = participants;
         return this;
     }

@@ -9,6 +9,7 @@ import com.azure.communication.callingserver.models.CallRejectReason;
 import com.azure.communication.callingserver.models.CallingServerErrorException;
 import com.azure.communication.callingserver.models.CreateCallOptions;
 import com.azure.communication.callingserver.models.CreateCallResult;
+import com.azure.communication.callingserver.models.MediaStreamingConfiguration;
 import com.azure.communication.common.CommunicationIdentifier;
 import com.azure.core.annotation.ReturnType;
 import com.azure.core.annotation.ServiceClient;
@@ -80,6 +81,7 @@ public final class CallAutomationClient {
      *
      * @param incomingCallContext The incoming call context.
      * @param callbackUri The call back uri. Optional
+     * @param mediaStreamingConfiguration The MediaStreamingConfiguration. Optional
      * @param context The context to associate with this operation.
      * @throws CallingServerErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
@@ -87,8 +89,9 @@ public final class CallAutomationClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<AnswerCallResult> answerCallWithResponse(String incomingCallContext, String callbackUri,
+                                                                     MediaStreamingConfiguration mediaStreamingConfiguration,
                                                                      Context context) {
-        return callAutomationAsyncClient.answerCallWithResponseInternal(incomingCallContext, callbackUri, context).block();
+        return callAutomationAsyncClient.answerCallWithResponseInternal(incomingCallContext, callbackUri, mediaStreamingConfiguration, context).block();
     }
 
     /**
